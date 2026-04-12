@@ -16,3 +16,20 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          version: 20
+          cache: 'pnpm' # enables automatic caching of pnpm store
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile # Ensures deterministic installs
