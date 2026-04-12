@@ -1,0 +1,3 @@
+/* Public style entry for the package. Import this once from the app shell. */
+
+@import './tokens.css';
