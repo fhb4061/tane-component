@@ -17,5 +17,3 @@ jobs:
               run: pnpm install --frozen-lockfile
             - name: Build
               run: pnpm run build
-            - name: Check job status
-              run: echo "🍏 This job's status is ${{ job.status }}."
