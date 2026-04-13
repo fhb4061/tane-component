@@ -2,7 +2,7 @@
 
 ## Summary
 - Start standalone first, not monorepo first. For a learning-first setup, the simplest path is: `pnpm` + TypeScript + Vite library mode for the package build + `tsc --emitDeclarationOnly` for types + Storybook React-Vite for docs/testing.
-- Use plain CSS via CSS Modules + CSS custom properties, not Tailwind-first and not runtime CSS-in-JS. This is the best v1 fit for a styled library that should work cleanly in Next.js, TanStack, React Router, and microfrontend consumers.
+- Use Tailwind CSS with shared theme tokens, not CSS Modules or runtime CSS-in-JS. This keeps styling inside the component API, preserves a zero-runtime CSS output, and still works cleanly in Next.js, TanStack, React Router, and microfrontend consumers.
 - `tsdown` looks strong for React libraries, but its CSS support is still marked experimental; because you want a styled library and Storybook's Vitest addon already expects a Vite-based Storybook, use Vite first and revisit `tsdown` later if packaging needs become more advanced.
 - For microfrontends, repo shape does not matter nearly as much as package contract. What matters is: stable exports, `react`/`react-dom` as peers, no bundled React, CSS isolation, and a predictable style import.
 
@@ -18,9 +18,8 @@ tane-components/
     index.ts
     components/Button/
       Button.tsx
-      Button.module.css
       Button.stories.tsx
-    styles/tokens.css
+    styles/style.css
   README.md
   LICENSE
 ```
@@ -48,8 +47,8 @@ tane-components/
    - Root re-exports only from `src/index.ts`
    - No imports from Next.js, TanStack Router, React Router, or app-specific code inside the library
 6. Build the source layout around one teaching component first: `Button`. Use that as the template for every later component.
-7. Style components with CSS Modules for local styles and CSS custom properties for tokens/theme values. Keep tokens in a shared `src/styles/tokens.css`.
-8. Make styles consumer-friendly: the consumer imports `@tane/ui/style.css` once in its app shell/root. This is clearer for frameworks and microfrontends than hiding CSS side effects.
+7. Style components with Tailwind CSS utilities and shared theme tokens in `src/styles/style.css`.
+8. Make styles consumer-friendly: the consumer imports the built `@tane/ui/style.css` once in its app shell/root, and the package ships precompiled CSS rather than raw Tailwind source.
 9. Add Storybook with `@storybook/react-vite` in the same repo. Keep it colocated with the standalone package for v1.
 10. Turn on Autodocs for all stories, then use MDX only for a short "Getting Started" page and package-level guidance.
 11. Add Storybook's Vitest addon so stories become component tests. Write one render test and one interaction/play test per component.
@@ -69,7 +68,7 @@ tane-components/
 - Treat interactive components as client-side UI and document Next.js usage from a client boundary when needed.
 - Avoid global CSS class contracts. The only intentional public styling contract should be:
   - the compiled `style.css`
-  - CSS custom properties/tokens you explicitly document
+  - documented Tailwind-backed theme tokens you explicitly expose
 
 ## Test Plan
 - Build produces JS, declarations, and one distributable CSS file.
@@ -86,11 +85,11 @@ tane-components/
 
 ## Assumptions And Defaults
 - Current workspace is empty and not yet a Git repo; local environment already has Node `24.13.1`, npm `11.8.0`, and `pnpm` `10.28.1`.
-- Chosen defaults: standalone first, `pnpm`, TypeScript, Vite library mode, CSS Modules + CSS variables, Storybook React-Vite, Storybook Vitest addon.
+- Chosen defaults: standalone first, `pnpm`, TypeScript, Vite library mode, Tailwind CSS, Storybook React-Vite, Storybook Vitest addon.
 - Monorepo recommendation: later, not now. When you do move, use `pnpm` workspaces first; add Changesets only when you actually have multi-package versioning/release needs.
 - Reference links:
   - [Vite library mode and CSS export](https://vite.dev/guide/build)
-  - [Vite CSS Modules](https://vite.dev/guide/features.html)
+  - [Tailwind CSS with Vite](https://tailwindcss.com/docs/installation/using-vite)
   - [Storybook docs](https://storybook.js.org/docs)
   - [Storybook Autodocs](https://storybook.js.org/docs/writing-docs/autodocs)
   - [Storybook Vitest addon](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/index)
