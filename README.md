@@ -24,7 +24,7 @@ This repository is the bare-bones scaffold for a React component library that ca
 
 ## Current state
 
-The package now includes a starter `Button` component, local CSS Modules, shared design tokens, and a colocated Storybook setup.
+The package now includes a starter `Button` component, Tailwind CSS styling with shared theme tokens, and a colocated Storybook setup.
 
 ## Next steps
 
@@ -35,11 +35,13 @@ The package now includes a starter `Button` component, local CSS Modules, shared
 
 ## Install later
 
-When you are ready to run the build locally, add the toolchain dependencies you choose for the project. This scaffold intentionally leaves that decision open so you can pick the exact versions later.
+This scaffold already includes the local toolchain dependencies needed to build and document the package.
 
 A minimal starting toolchain is:
 
 - `vite`
+- `tailwindcss`
+- `@tailwindcss/vite`
 - `@vitejs/plugin-react`
 - `typescript`
 - `@types/react`
